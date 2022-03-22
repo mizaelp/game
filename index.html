@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Game Sprint</title>
     <style>
       body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
@@ -18,27 +18,31 @@
   <body>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <!-- <input id="input" autocomplete="off" /> -->
+      <button>Gerar um número</button>
     </form>
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io();
+    const socket = io()
   
-    var messages = document.getElementById('messages');
-    var form = document.getElementById('form');
-    var input = document.getElementById('input');
+    const messages = document.getElementById('messages')
+    const form = document.getElementById('form')
+    // const input = document.getElementById('input')
+
+    const getNumber = () => Math.floor(Math.random() * 12)
   
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (input.value) {
-        socket.emit('message', input.value);
-        input.value = '';
-      }
-    });
+    form.addEventListener('submit', e => {
+      const number =  getNumber()
+      e.preventDefault()
+      // if (input.value) {
+        socket.emit('message', number)
+        // input.value = ''
+      // }
+    })
   
     socket.on('message', function(msg) {
-      var item = document.createElement('li');
+      let item = document.createElement('li');
       item.textContent = msg;
       messages.appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
