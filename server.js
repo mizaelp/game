@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const res = require('express/lib/response')
 const app = express()
@@ -7,15 +8,20 @@ const { Server } = require('socket.io')
 const io = new Server(server)
 const port = process.env.PORT || 5000 
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
+app.use(express.static(__dirname + '/public'))
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html")
+  
 })
 
 io.on('connection', (socket) => {
-  socket.on('message', (msg) => {
-    console.log(msg)
+  socket.on('message', msg => {
     io.emit('message', msg)
+  })
+  socket.on('config', msg => {
     console.log(msg)
+    io.emit('config', msg)
   })
 })
 
